@@ -24,7 +24,7 @@
     * [ ] 6. Admin can delete user reviews
     * [ ] 7. Admin can delete user accounts
 
-# tech stack
+# Tech stack
 
 - frontend: reactjs(good visual, fast, responsive)
 - backend: aws rds (go : fast, concurrent, low latency)
