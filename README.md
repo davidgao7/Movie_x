@@ -28,3 +28,4 @@
 
 - frontend: reactjs(good visual, fast, responsive)
 - backend: aws rds (go : fast, concurrent, low latency)
+- mainly store user data, movie can fetched from imdb
