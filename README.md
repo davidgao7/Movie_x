@@ -29,3 +29,15 @@
 - frontend: reactjs(good visual, fast, responsive)
 - backend: aws rds (go : fast, concurrent, low latency)
 - mainly store user data, movie can fetched from imdb
+
+# Phase 1 objectives (backend: go)
+
+- [ ] fetch movie data from imdb, return dictionary(json)
+- [ ] create and store movies into database
+- [ ] create facade functions
+
+# Phase 2 objectives (frontend: reactjs)
+
+- [ ] create movie_x website navigation
+- [ ] create movie_x website hero
+- [ ] create movie_x website movie list
