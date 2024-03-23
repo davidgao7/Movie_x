@@ -56,8 +56,23 @@ func fetch_from_csv() {
 		}
 		fmt.Println("=====================")
 		fmt.Println(record)
-		fmt.Println("type of record: ", reflect.TypeOf(record[0]))
+		fmt.Println(record[0])
+		fmt.Println("type of record[0]: ", reflect.TypeOf(record[0]))
 		fmt.Println("=====================")
+		// title      string // lower case can only be accessed within the same package
+		// year       string
+		// length     uint32
+		// rate_level string
+		// review     float32
+		// genre      *string
+		// stars      *string
+
+		title := record[2]      // primaryTitle in csv
+		year := record[5]       // startYear in csv
+		length := record[7]     // runtimeMinutes in csv
+		rate_level := record[8] // averageRating in csv
+		review := record[9]     // numVotes in csv
+		genre := record[-1]     // genres in csv
 
 		// TODO: deal with one line first
 		break
