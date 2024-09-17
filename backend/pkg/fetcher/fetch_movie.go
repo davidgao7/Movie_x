@@ -73,14 +73,28 @@ func ProcessLine(line string) (model.Movie, error) {
 	}
 
 	// Example parsing logic (adjust as necessary to match your CSV format)
-	movie := model.Movie{
-		Title:     fields[0],
-		Year:      fields[1],
-		Length:    parseUint32(fields[2]),
-		RateLevel: fields[3],
-		Review:    parseFloat32(fields[4]),
-		Genre:     &fields[5], // Assume this field is optional
-		Stars:     &fields[6], // Assume this field is optional
+	fmt.Println(fields)
+	fmt.Println(len(fields))
+
+	var movie model.Movie
+	if len(fields) == 7 {
+		movie = model.Movie{
+			Title:     fields[0],
+			Year:      fields[1],
+			Length:    parseUint32(fields[2]),
+			RateLevel: fields[3],
+			Review:    parseFloat32(fields[4]),
+			Genre:     &fields[5], // Assume this field is optional
+			Stars:     &fields[6], // Assume this field is optional
+		}
+	} else if len(fields) == 5 {
+		movie = model.Movie{
+			Title:     fields[0],
+			Year:      fields[1],
+			Length:    parseUint32(fields[2]),
+			RateLevel: fields[3],
+			Review:    parseFloat32(fields[4]),
+		}
 	}
 
 	return movie, nil
