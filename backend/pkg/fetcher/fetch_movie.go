@@ -20,8 +20,8 @@ func FetchFromCSV(filePath string, numWorkers int) ([]model.Movie, error) {
 
 	// Channel to send lines to workers
 	linesChan := make(chan string, 100)
-	moviesChan := make(chan model.Movie, 100) // Channel to collect processed movies
-	var wg sync.WaitGroup                     // WaitGroup to wait for all workers to finish
+	moviesChan := make(chan model.Movie, 1000) // Channel to collect processed movies, Increase the buffer size to prevent blocking
+	var wg sync.WaitGroup                      // WaitGroup to wait for all workers to finish
 
 	// Start worker goroutines
 	for i := 0; i < numWorkers; i++ {
