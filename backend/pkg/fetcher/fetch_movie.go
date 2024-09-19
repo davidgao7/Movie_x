@@ -50,6 +50,7 @@ func FetchFromCSV(filePath string, numWorkers int) ([]model.Movie, error) {
 		close(moviesChan) // No more movies to collect
 	}()
 
+	// TODO: instead of store can pass to kafka to store??
 	// Collect all movies
 	var movies []model.Movie
 	for movie := range moviesChan {

@@ -2,8 +2,9 @@ package main
 
 import (
 	// import the db package
-	"backend/pkg/db"
-	"backend/pkg/fetcher" // import the fetcher package locally
+	"backend/internal/db" // import the fetcher package locally
+	"backend/pkg/fetcher"
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -11,11 +12,32 @@ import (
 
 func main() {
 	// test redis connection
-	redis_client, err := db.GetClient("redis://localhost:6379")
+	// Define Redis connection URL
+	// TODO: encapsulate this to .env file
+
+	// Get Redis client
+	redisClient, _ := db.GetRedisClient(redisURL)
+
+	fmt.Println(redisClient)
+
+	// TEST: set a key-value pair
+	ctx := context.Background()
+
+	err := redisClient.Set(ctx, "testKey", "testValue", 0).Err()
 	if err != nil {
-		log.Fatalf("Error connecting to Redis: %v", err)
+		log.Fatalf("Failed to set key: %v", err)
 	}
-	defer redis_client.Close()
+	// TEST: get the value of the key
+	val, err := redisClient.Get(ctx, "testKey").Result()
+	if err != nil {
+		log.Fatalf("Failed to get key: %v", err)
+	}
+	fmt.Println("testKey:", val)
+
+	defer redisClient.Close()
+
+	fmt.Println("===============Connected to Redis===============")
+	os.Exit(0)
 
 	dir, err := os.Getwd()
 	if err != nil {
