@@ -1,4 +1,4 @@
-package dbutil
+package db
 
 import (
 	"fmt"
@@ -6,12 +6,12 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func getClient(url string) *redis.Client {
+func GetClient(url string) (*redis.Client, error) {
 	opts, err := redis.ParseURL(url)
 	if err != nil {
 		fmt.Println("Error parsing redis url: ", err)
-		return nil
+		return nil, err
 	}
 
-	return redis.NewClient(opts)
+	return redis.NewClient(opts), nil
 }

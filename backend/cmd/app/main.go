@@ -1,6 +1,8 @@
 package main
 
 import (
+	// import the db package
+	"backend/pkg/db"
 	"backend/pkg/fetcher" // import the fetcher package locally
 	"fmt"
 	"log"
@@ -8,6 +10,13 @@ import (
 )
 
 func main() {
+	// test redis connection
+	redis_client, err := db.GetClient("redis://localhost:6379")
+	if err != nil {
+		log.Fatalf("Error connecting to Redis: %v", err)
+	}
+	defer redis_client.Close()
+
 	dir, err := os.Getwd()
 	if err != nil {
 		fmt.Println("Error getting current directory: ", err)
