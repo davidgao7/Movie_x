@@ -27,7 +27,7 @@
 # Tech stack
 
 - frontend: reactjs(good visual, fast, responsive)
-- backend: aws rds (go : fast, concurrent, low latency)
+- backend: redis (go : fast, concurrent, low latency)
 - mainly store user data, movie can fetched from imdb
 
 # Phase 1 objectives (backend: go)
