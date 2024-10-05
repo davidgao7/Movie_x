@@ -2,41 +2,60 @@ package main
 
 import (
 	// import the db package
-	"backend/internal/db" // import the fetcher package locally
+	// import the fetcher package locally
+	// Import the db package
+	"backend/internal/db"
 	"backend/pkg/fetcher"
-	"context"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// test redis connection
-	// Define Redis connection URL
-	// TODO: encapsulate this to .env file
-
-	// Get Redis client
-	redisClient, _ := db.GetRedisClient(redisURL)
-
-	fmt.Println(redisClient)
-
-	// TEST: set a key-value pair
-	ctx := context.Background()
-
-	err := redisClient.Set(ctx, "testKey", "testValue", 0).Err()
+	// // test redis connection
+	// // Define Redis connection URL
+	err := godotenv.Load("../../../.env")
 	if err != nil {
-		log.Fatalf("Failed to set key: %v", err)
+		log.Fatalf("Error loading .env file: %v", err)
 	}
-	// TEST: get the value of the key
-	val, err := redisClient.Get(ctx, "testKey").Result()
+	// redisURL := os.Getenv("REDIS_URL")
+	//
+	// // Get Redis client
+	// redisClient, _ := db.GetRedisClient(redisURL)
+	//
+	// fmt.Println(redisClient)
+	//
+	// // TEST: set a key-value pair
+	// ctx := context.Background()
+	//
+	// err = redisClient.Set(ctx, "testKey", "testValue", 0).Err()
+	// if err != nil {
+	// 	log.Fatalf("Failed to set key: %v", err)
+	// }
+	// // TEST: get the value of the key
+	// val, err := redisClient.Get(ctx, "testKey").Result()
+	// if err != nil {
+	// 	log.Fatalf("Failed to get key: %v", err)
+	// }
+	// fmt.Println("testKey:", val)
+	//
+	// defer redisClient.Close()
+	//
+	// fmt.Println("===============Connected to Redis===============")
+	//
+
+	// Get PostgreSQL client
+	postgreURL := os.Getenv("XATA_POSTGRE_SQL_ENDPOINT")
+	dbClient, err := db.GetPostgresClient(postgreURL)
 	if err != nil {
-		log.Fatalf("Failed to get key: %v", err)
+		log.Fatalf("Failed to connect to PostgreSQL: %v", err)
 	}
-	fmt.Println("testKey:", val)
+	defer dbClient.Close()
 
-	defer redisClient.Close()
+	fmt.Println("===============Connected to PostgreSQL===============")
 
-	fmt.Println("===============Connected to Redis===============")
 	os.Exit(0)
 
 	dir, err := os.Getwd()
@@ -73,5 +92,7 @@ func main() {
 			fmt.Printf("Stars: %s\n", *movie.Stars)
 		}
 		fmt.Println("-----------")
+
+		// populate the movie into the database
 	}
 }
