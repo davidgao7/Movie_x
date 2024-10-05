@@ -10,6 +10,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/lib/pq"
+
 	"github.com/joho/godotenv"
 )
 
@@ -52,10 +54,49 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to PostgreSQL: %v", err)
 	}
-	defer dbClient.Close()
 
 	fmt.Println("===============Connected to PostgreSQL===============")
 
+	// initialize the database and tables
+	fmt.Println("===============Initializing the database===============")
+
+	fmt.Println("===============check if table exists===============")
+	var exists int
+	db_name := os.Getenv("DB_NAME")
+	query_check_table := fmt.Sprintf("SELECT COUNT(id) as movies_num FROM %s.movies", pq.QuoteIdentifier(db_name))
+	row := dbClient.QueryRow(query_check_table)
+	err = row.Scan(&exists)
+	fmt.Println("error", err)
+	fmt.Println("===============check if table exists ends===============")
+
+	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "42P01" {
+			// 42P01 is the PostgreSQL error code for "relation does not exist"
+			fmt.Println("Table does not exist, creating table")
+			_, err = dbClient.Exec(`
+            CREATE TABLE IF NOT EXISTS movies (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                year VARCHAR(4) NOT NULL,
+                length INT,
+                rate_level VARCHAR(50),
+                review REAL,
+                genre VARCHAR(255),
+                stars VARCHAR(255)
+            );
+        `)
+			if err != nil {
+				log.Fatalf("Failed to create table: %v", err)
+			}
+		} else {
+			log.Fatalf("Failed to check if table exists: %v", err)
+		}
+		fmt.Println("===========Table created=================")
+	} else {
+		fmt.Println("Table exists, skipping table creation")
+	}
+
+	fmt.Println("===============Initializing the database success!===============")
 	os.Exit(0)
 
 	dir, err := os.Getwd()
@@ -95,4 +136,5 @@ func main() {
 
 		// populate the movie into the database
 	}
+	defer dbClient.Close()
 }
