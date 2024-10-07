@@ -16,12 +16,19 @@ import (
 )
 
 func main() {
-	// // test redis connection
-	// // Define Redis connection URL
 	err := godotenv.Load("../../../.env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
+
+	/*
+	 *
+	 *
+	 * Get redis client
+	 *
+	 *
+	 */
+
 	// redisURL := os.Getenv("REDIS_URL")
 	//
 	// // Get Redis client
@@ -48,7 +55,13 @@ func main() {
 	// fmt.Println("===============Connected to Redis===============")
 	//
 
-	// Get PostgreSQL client
+	/*
+	 *
+	 * Get PostgreSQL client
+	 *
+	 *
+	 */
+
 	postgreURL := os.Getenv("XATA_POSTGRE_SQL_ENDPOINT")
 	dbClient, err := db.GetPostgresClient(postgreURL)
 	if err != nil {
@@ -97,8 +110,12 @@ func main() {
 	}
 
 	fmt.Println("===============Initializing the database success!===============")
-	os.Exit(0)
 
+	/*
+	 *
+	 * fetch data from TSV file and populate the data into the database
+	 *
+	 * */
 	dir, err := os.Getwd()
 	if err != nil {
 		fmt.Println("Error getting current directory: ", err)
